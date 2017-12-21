@@ -55,4 +55,4 @@ class resnet152(pytorch_base):
 class densenet161(pytorch_base):
 
   def __init__(self, precision, image_shape, batch_size):
-    super().__init__('resnet152', precision, image_shape, batch_size)
+    super().__init__('densenet161', precision, image_shape, batch_size)

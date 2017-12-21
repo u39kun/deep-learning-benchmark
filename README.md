@@ -55,9 +55,9 @@ with a batch size of 16.
 Titan V gets a significant speed up when going to half precision by utilizing its Tensor cores, while
 1080 Ti gets a small speed up with half precision computation.
 
-|Model  |Framework   |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
+|Model  |Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
 |-------|-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
-|Titan V|PyTorch 0.3.0|32-bit      |31.2ms       |110.7ms    |49.6ms           |178.6ms        |48.9ms             |178.2ms          |
-|Titan V|PyTorch 0.3.0|16-bit      |15.4ms       |75.5ms     |26.6ms           |117.1ms        |26.1ms             |117.4ms          |
-|1080 Ti|PyTorch 0.3.0|32-bit      |38.9ms       |133.3ms    |58.5ms           |206.7ms        |57.7ms             |207.9ms          |    
-|1080 Ti|PyTorch 0.3.0|16-bit      |33.9ms       |119.4ms    |46.9ms           |194.6ms        |48.8ms             |194.9ms          |    
+|Titan V|PyTorch 0.3.0|32-bit      |31.2ms       |110.7ms    |49.6ms           |178.6ms        |56.4ms             |181.1ms          |
+|Titan V|PyTorch 0.3.0|16-bit      |15.4ms       |75.5ms     |26.6ms           |117.1ms        |37.6ms             |123.7ms          |
+|1080 Ti|PyTorch 0.3.0|32-bit      |38.9ms       |133.3ms    |58.5ms           |206.7ms        |63.7ms             |209.0ms          |    
+|1080 Ti|PyTorch 0.3.0|16-bit      |33.9ms       |119.4ms    |46.9ms           |194.6ms        |50.0ms             |188.7ms          |    

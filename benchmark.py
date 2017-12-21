@@ -36,8 +36,8 @@ class Benchmark():
         for framework in frameworks:
             for model in models:
                 for precision in precisions:
-                    #duration = self.benchmark_model('eval', framework, model, precision)
-                    #print("{}'s {} eval at {}: {}ms avg".format(framework, model, precision, round(duration, 1)))
+                    duration = self.benchmark_model('eval', framework, model, precision)
+                    print("{}'s {} eval at {}: {}ms avg".format(framework, model, precision, round(duration, 1)))
                     duration = self.benchmark_model('train', framework, model, precision)
                     print("{}'s {} train at {}: {}ms avg".format(framework, model, precision, round(duration, 1)))
 
