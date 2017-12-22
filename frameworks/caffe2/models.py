@@ -3,6 +3,7 @@ from time import time
 from caffe2.proto import caffe2_pb2
 from caffe2.python.modeling.initializers import Initializer, pFP16Initializer
 from caffe2.python import core, model_helper, workspace, brew
+from caffe2.python.models.resnet import ResNetBuilder
 
 #core.GlobalInit(['caffe2', '--caffe2_log_level=0'])
 
@@ -11,6 +12,29 @@ class caffe2_base:
     def __init__(self, model_name, precision, image_shape, batch_size):
         self.float_type = np.float32 if precision == 'fp32' else np.float16
         self.input = np.random.rand(batch_size, 3, image_shape[0], image_shape[1]).astype(self.float_type)
+        with core.DeviceScope(core.DeviceOption(caffe2_pb2.CUDA, 0)):
+          model = model_helper.ModelHelper(name=model_name, init_params=True)
+          softmax = getattr(self, model_name + '_model')(model, "data", precision)
+          if precision == 'fp16':
+            softmax = model.net.HalfToFloat(softmax, softmax + "_fp32")
+          forward_net = core.Net(model.net.Proto())
+          if False:
+            print(forward_net.Proto())
+            from caffe2.python import net_drawer
+            graph = net_drawer.GetPydotGraphMinimal(forward_net, rankdir="LR")
+            with open('/host/graph.png', 'wb') as fout:
+              fout.write(graph.create_png())
+          # bogus loss function to force backprop
+          loss = model.net.Sum(softmax, 'loss')
+          model.AddGradientOperators([loss])
+          workspace.RunNetOnce(model.param_init_net)
+
+          data = np.zeros((16, 3, 224, 224), dtype=self.float_type)
+          workspace.FeedBlob("data", data)
+          workspace.CreateNet(model.net)
+          workspace.CreateNet(forward_net)
+          self.model = model
+          self.forward_net = forward_net
 
     def eval(self):
         with core.DeviceScope(core.DeviceOption(caffe2_pb2.CUDA, 0)):
@@ -34,23 +58,6 @@ class vgg16(caffe2_base):
 
   def __init__(self, precision, image_shape, batch_size):
     caffe2_base.__init__(self, 'vgg16', precision, image_shape, batch_size)
-    with core.DeviceScope(core.DeviceOption(caffe2_pb2.CUDA, 0)):
-      model = model_helper.ModelHelper(name="vgg16", init_params=True)
-      softmax = self.vgg16_model(model, "data", precision)
-      if precision == 'fp16':
-        softmax = model.net.HalfToFloat(softmax, softmax + "_fp32")
-      forward_net = core.Net(model.net.Proto())
-      # bogus loss function to force backprop
-      loss = model.net.Sum(softmax, 'loss')
-      model.AddGradientOperators([loss])
-      workspace.RunNetOnce(model.param_init_net)
-
-      data = np.zeros((16, 3, 224, 224), dtype=self.float_type)
-      workspace.FeedBlob("data", data)
-      workspace.CreateNet(model.net)
-      workspace.CreateNet(forward_net)
-      self.model = model
-      self.forward_net = forward_net
 
   def vgg16_model(self, model, data, precision):
     initializer = Initializer if precision == 'fp32' else pFP16Initializer
@@ -101,4 +108,110 @@ class vgg16(caffe2_base):
       pred = brew.fc(model, fc7, 'pred', 4096, 1000)
       softmax = brew.softmax(model, pred, 'softmax')
       return softmax
+
+class resnet152(caffe2_base):
+
+  def __init__(self, precision, image_shape, batch_size):
+    caffe2_base.__init__(self, 'resnet152', precision, image_shape, batch_size)
+
+  def resnet152_model(self, model, data, precision):
+    initializer = Initializer if precision == 'fp32' else pFP16Initializer
+    with brew.arg_scope([brew.conv, brew.fc],
+                        WeightInitializer=initializer,
+                        BiasInitializer=initializer,
+                        enable_tensor_core=True):      
+      model = create_resnet152(model, "data", 3, 1000)
+      return model
+
+def create_resnet152(
+    model,
+    data,
+    num_input_channels,
+    num_labels,
+    label=None,
+    is_test=False,
+    no_loss=False,
+    no_bias=0,
+    conv1_kernel=7,
+    conv1_stride=2,
+    final_avg_kernel=7,
+):
+    # conv1 + maxpool
+    brew.conv(
+        model,
+        data,
+        'conv1',
+        num_input_channels,
+        64,
+        weight_init=("MSRAFill", {}),
+        kernel=conv1_kernel,
+        stride=conv1_stride,
+        pad=3,
+        no_bias=no_bias
+    )
+
+    brew.spatial_bn(
+        model,
+        'conv1',
+        'conv1_spatbn_relu',
+        64,
+        epsilon=1e-3,
+        momentum=0.1,
+        is_test=is_test
+    )
+    brew.relu(model, 'conv1_spatbn_relu', 'conv1_spatbn_relu')
+    brew.max_pool(model, 'conv1_spatbn_relu', 'pool1', kernel=3, stride=2)
+
+    # Residual blocks...
+    builder = ResNetBuilder(model, 'pool1', no_bias=no_bias,
+                            is_test=is_test, spatial_bn_mom=0.1)
+
+    # conv2_x (ref Table 1 in He et al. (2015))
+    builder.add_bottleneck(64, 64, 256)
+    builder.add_bottleneck(256, 64, 256)
+    builder.add_bottleneck(256, 64, 256)
+
+    # conv3_x
+    builder.add_bottleneck(256, 128, 512, down_sampling=True)
+    for _ in range(1, 8):
+        builder.add_bottleneck(512, 128, 512)
+
+    # conv4_x
+    builder.add_bottleneck(512, 256, 1024, down_sampling=True)
+    for _ in range(1, 36):
+        builder.add_bottleneck(1024, 256, 1024)
+
+    # conv5_x
+    builder.add_bottleneck(1024, 512, 2048, down_sampling=True)
+    builder.add_bottleneck(2048, 512, 2048)
+    builder.add_bottleneck(2048, 512, 2048)
+
+    # Final layers
+    final_avg = brew.average_pool(
+        model,
+        builder.prev_blob,
+        'final_avg',
+        kernel=final_avg_kernel,
+        stride=1,
+    )
+
+    # Final dimension of the "image" is reduced to 7x7
+    last_out = brew.fc(
+        model, final_avg, 'last_out_L{}'.format(num_labels), 2048, num_labels
+    )
+
+    if no_loss:
+        return last_out
+
+    # If we create model for training, use softmax-with-loss
+    if (label is not None):
+        (softmax, loss) = model.SoftmaxWithLoss(
+            [last_out, label],
+            ["softmax", "loss"],
+        )
+
+        return (softmax, loss)
+    else:
+        # For inference, we just return softmax
+        return brew.softmax(model, last_out, "softmax")
 
