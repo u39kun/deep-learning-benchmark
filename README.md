@@ -75,3 +75,8 @@ Similarly, the numbers from V100 on an Amazon p3 instance is shown.  It is faste
 |-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
 |PyTorch 0.3.0|32-bit      |26.2ms       |83.5ms    |38.7ms           |136.5ms        |48.3ms             |142.5ms          |
 |PyTorch 0.3.0|16-bit      |12.6ms       |58.8ms     |21.7ms           |92.9ms        |35.7ms             |102.3ms          |
+
+# Contributors
+
+* Yusaku Sako
+* Bartosz Ludwiczuk (thank you for supplying the V100 numbers)
