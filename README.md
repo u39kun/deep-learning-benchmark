@@ -49,6 +49,8 @@ Except where noted.
 
 # Benchmark Results
 
+## PyTorch 0.3.0
+
 The results are based on running the models with images of size 224 x 224 x 3
 with a batch size of 16.
 "Eval" shows the duration for a single forward pass averaged over 10 passes.
@@ -58,23 +60,38 @@ Titan V gets a significant speed up when going to half precision by utilizing it
 1080 Ti gets a small speed up with half precision computation.
 Similarly, the numbers from V100 on an Amazon p3 instance is shown.  It is faster than Titan V and the speed up when going to half-precision is similar to that of Titan V.
 
-## Titan V
+### Titan V
 |Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
 |-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
 |PyTorch 0.3.0|32-bit      |31.2ms       |110.7ms    |49.6ms           |178.6ms        |56.4ms             |181.1ms          |
 |PyTorch 0.3.0|16-bit      |15.4ms       |75.5ms     |26.6ms           |117.1ms        |37.6ms             |123.7ms          |
 
-## 1080 Ti
+### 1080 Ti
 |Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
 |-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
 |PyTorch 0.3.0|32-bit      |38.9ms       |133.3ms    |58.5ms           |206.7ms        |63.7ms             |209.0ms          |    
 |PyTorch 0.3.0|16-bit      |33.9ms       |119.4ms    |46.9ms           |194.6ms        |50.0ms             |188.7ms          |    
 
-## V100 (Amazon p3, CUDA 9.0.176, CuDNN 7.0.0.3)
+### V100 (Amazon p3, CUDA 9.0.176, CuDNN 7.0.0.3)
 |Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
 |-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
 |PyTorch 0.3.0|32-bit      |26.2ms       |83.5ms    |38.7ms           |136.5ms        |48.3ms             |142.5ms          |
 |PyTorch 0.3.0|16-bit      |12.6ms       |58.8ms     |21.7ms           |92.9ms        |35.7ms             |102.3ms          |
+
+## Caffe2 0.8.1
+
+### Titan V
+|Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
+|-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
+|Caffe2 0.8.1 |32-bit      |57.6ms       |184.9ms    |74.3ms           |214.2ms        |ms           |ms          |
+|Caffe2 0.8.1 |16-bit      |41.7ms       |156.2ms    |56.7ms           |173.0ms        |ms             |ms          |
+
+### 1080 Ti
+|Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
+|-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
+|Caffe2 0.8.1 |32-bit      |45.8ms       |154.5ms    |75.7ms           |221.4ms        |ms             |ms          |
+|Caffe2 0.8.1 |16-bit      |38.4ms       |134.9ms    |59.1ms           |181.2ms        |ms             |ms          |
+
 
 # Contributors
 
