@@ -3,6 +3,7 @@ from importlib import import_module
 frameworks = [
     'pytorch',
     # 'tensorflow'
+    #'caffe2'
 ]
 
 models = [
