@@ -29,7 +29,7 @@ class caffe2_base:
           model.AddGradientOperators([loss])
           workspace.RunNetOnce(model.param_init_net)
 
-          data = np.zeros((16, 3, 224, 224), dtype=self.float_type)
+          data = np.zeros((batch_size, 3, image_shape[0], image_shape[1]), dtype=self.float_type)
           workspace.FeedBlob("data", data)
           workspace.CreateNet(model.net)
           workspace.CreateNet(forward_net)

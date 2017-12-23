@@ -10,8 +10,9 @@ def print_as_table(file):
     rows = []
     for precision in precisions:
       precision_display = '32-bit' if precision == 'fp32' else '16-bit'
-      row = ['{:.1f}ms'.format(v) if v > 0 else '' for v in results[precision]]
-      rows.append([precision_display] + row)
+      if precision in results:
+        row = ['{:.1f}ms'.format(v) if v > 0 else '' for v in results[precision]]
+        rows.append([precision_display] + row)
 
     header = ['{} {}'.format(m, phase) for m in models for phase in ['eval', 'train']]
     header = ['Precision'] + header

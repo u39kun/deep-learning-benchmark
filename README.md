@@ -57,36 +57,52 @@ Titan V gets a significant speed up when going to half precision by utilizing it
 Similarly, the numbers from V100 on an Amazon p3 instance is shown.  It is faster than Titan V and the speed up when going to half-precision is similar to that of Titan V.
 
 ### Titan V
-|Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
-|-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
-|PyTorch 0.3.0|32-bit      |31.2ms       |110.7ms    |49.6ms           |178.6ms        |56.4ms             |181.1ms          |
-|PyTorch 0.3.0|16-bit      |15.4ms       |75.5ms     |26.6ms           |117.1ms        |37.6ms             |123.7ms          |
+| Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+|:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
+| 32-bit      | 31.3ms       | 108.8ms       | 48.9ms           | 180.2ms           | 52.4ms             | 174.1ms             |
+| 16-bit      | 14.7ms       | 74.1ms        | 26.1ms           | 115.9ms           | 32.2ms             | 118.9ms             |
 
 ### 1080 Ti
-|Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
-|-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
-|PyTorch 0.3.0|32-bit      |38.9ms       |133.3ms    |58.5ms           |206.7ms        |63.7ms             |209.0ms          |    
-|PyTorch 0.3.0|16-bit      |33.9ms       |119.4ms    |46.9ms           |194.6ms        |50.0ms             |188.7ms          |    
+| Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+|:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
+| 32-bit      | 39.3ms       | 131.9ms       | 57.8ms           | 206.4ms           | 62.9ms             | 211.9ms             |
+| 16-bit      | 33.5ms       | 117.6ms       | 46.9ms           | 193.5ms           | 50.1ms             | 191.0ms             |
 
 ### V100 (Amazon p3, CUDA 9.0.176, CuDNN 7.0.0.3)
-|Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
-|-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
-|PyTorch 0.3.0|32-bit      |26.2ms       |83.5ms    |38.7ms           |136.5ms        |48.3ms             |142.5ms          |
-|PyTorch 0.3.0|16-bit      |12.6ms       |58.8ms     |21.7ms           |92.9ms        |35.7ms             |102.3ms          |
+|Precision   |VGG16 eval|VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
+|------------|----------|-----------|-----------------|---------------|-------------------|-----------------|
+|32-bit      |26.2ms    |83.5ms     |38.7ms           |136.5ms        |48.3ms             |142.5ms          |
+|16-bit      |12.6ms    |58.8ms     |21.7ms           |92.9ms         |35.7ms             |102.3ms          |
+
+
+## TensorFlow 1.4.0
+
+### Titan V
+| Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+|:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
+| 32-bit      | 32.0ms       | 195.3ms       | 50.6ms           | 274.4ms           |                    |                     |
+| 16-bit      | 16.3ms       | 86.0ms        | 28.8ms           | 197.9ms           |                    |                     |
+
+### 1080 Ti
+| Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+|:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
+| 32-bit      | 43.4ms       | 131.3ms       | 69.6ms           | 300.6ms           |                    |                     |
+| 16-bit      | 38.6ms       | 121.1ms       | 53.9ms           | 257.0ms           |                    |                     |
+
 
 ## Caffe2 0.8.1
 
 ### Titan V
-|Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
-|-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
-|Caffe2 0.8.1 |32-bit      |57.6ms       |184.9ms    |74.3ms           |214.2ms        |N/A           |N/A          |
-|Caffe2 0.8.1 |16-bit      |41.7ms       |156.2ms    |56.7ms           |173.0ms        |N/A             |N/A          |
+| Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+|:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
+| 32-bit      | 57.5ms       | 185.4ms       | 74.4ms           | 214.1ms           |                    |                     |
+| 16-bit      | 41.6ms       | 156.1ms       | 56.9ms           | 172.7ms           |                    |                     |                    
 
 ### 1080 Ti
-|Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
-|-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
-|Caffe2 0.8.1 |32-bit      |45.8ms       |154.5ms    |75.7ms           |221.4ms        |N/A             |N/A          |
-|Caffe2 0.8.1 |16-bit      |38.4ms       |134.9ms    |59.1ms           |181.2ms        |N/A             |N/A          |
+|Precision   |VGG16 eval|VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval|Densenet161 train|
+|------------|----------|-----------|-----------------|---------------|----------------|-----------------|
+| 32-bit     | 47.0ms   | 158.9ms   | 77.9ms          | 223.9ms       |                |                 |
+| 16-bit     | 40.1ms   | 137.8ms   | 61.7ms          | 184.1ms       |                |                 |
 
 
 # Contributors
