@@ -36,23 +36,31 @@ class caffe2_base:
           self.model = model
           self.forward_net = forward_net
 
-    def eval(self):
+    def eval(self, num_iterations, num_warmups):
+        durations = []
         with core.DeviceScope(core.DeviceOption(caffe2_pb2.CUDA, 0)):
-            t1 = time()
-            workspace.FeedBlob("data", self.input)
-            workspace.RunNet(self.forward_net.Proto().name)
-            out = workspace.FetchBlob("softmax")
-            t2 = time()
-            return t2 - t1
+            for i in range(num_iterations + num_warmups):
+                t1 = time()
+                workspace.FeedBlob("data", self.input)
+                workspace.RunNet(self.forward_net.Proto().name)
+                out = workspace.FetchBlob("softmax")
+                t2 = time()
+                if i >= num_warmups:
+                    durations.append(t2 - t1)
+        return durations
 
-    def train(self):
+    def train(self, num_iterations, num_warmups):
+        durations = []
         with core.DeviceScope(core.DeviceOption(caffe2_pb2.CUDA, 0)):
-            t1 = time()
-            workspace.FeedBlob("data", self.input)
-            workspace.RunNet(self.model.net.Proto().name)
-            out = workspace.FetchBlob("softmax")
-            t2 = time()
-            return t2 - t1
+            for i in range(num_iterations + num_warmups):
+                t1 = time()
+                workspace.FeedBlob("data", self.input)
+                workspace.RunNet(self.model.net.Proto().name)
+                out = workspace.FetchBlob("softmax")
+                t2 = time()
+                if i >= num_warmups:
+                    durations.append(t2 - t1)
+        return durations
 
 class vgg16(caffe2_base):
 

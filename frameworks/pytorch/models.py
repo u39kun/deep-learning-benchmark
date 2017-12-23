@@ -19,26 +19,34 @@ class pytorch_base:
         self.train_input = torch.autograd.Variable(x, requires_grad=True).cuda() if precision == 'fp32' \
             else torch.autograd.Variable(x, requires_grad=True).cuda().half()
 
-    def eval(self):
+    def eval(self, num_iterations, num_warmups):
         self.model.eval()
-        torch.cuda.synchronize()
-        t1 = time()
-        self.model(self.eval_input)
-        torch.cuda.synchronize()
-        t2 = time()
-        return t2 - t1
+        durations = []
+        for i in range(num_iterations + num_warmups):
+            torch.cuda.synchronize()
+            t1 = time()
+            self.model(self.eval_input)
+            torch.cuda.synchronize()
+            t2 = time()
+            if i >= num_warmups:
+                durations.append(t2 - t1)
+        return durations
 
-    def train(self):
+    def train(self, num_iterations, num_warmups):
         self.model.train()
-        torch.cuda.synchronize()
-        t1 = time()
-        self.model.zero_grad()
-        out = self.model(self.train_input)
-        loss = out.sum()
-        loss.backward()
-        torch.cuda.synchronize()
-        t2 = time()
-        return t2 - t1
+        durations = []
+        for i in range(num_iterations + num_warmups):
+            torch.cuda.synchronize()
+            t1 = time()
+            self.model.zero_grad()
+            out = self.model(self.train_input)
+            loss = out.sum()
+            loss.backward()
+            torch.cuda.synchronize()
+            t2 = time()
+            if i >= num_warmups:
+                durations.append(t2 - t1)
+        return durations
 
 class vgg16(pytorch_base):
 
@@ -56,3 +64,4 @@ class densenet161(pytorch_base):
 
   def __init__(self, precision, image_shape, batch_size):
     super().__init__('densenet161', precision, image_shape, batch_size)
+
