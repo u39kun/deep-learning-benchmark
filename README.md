@@ -9,30 +9,26 @@ Note: Docker images available from NVIDIA GPU Cloud were used so as to make benc
 * PyTorch 0.3.0
   * `docker pull nvcr.io/nvidia/pytorch:17.12`
 
-
-* Tensorflow 1.4.0 (coming soon)
-  * `docker pull nvcr.io/nvidia/tensorflow:17.12`
-
-
-* MXNet 1.0.0 (coming soon)
-  * `docker pull nvcr.io/nvidia/mxnet:17.12`
-
-
-* Caffe2 (coming soon)
+* Caffe2 0.8.1
   * `docker pull nvcr.io/nvidia/caffe2:17.12`
 
+* Tensorflow 1.4.0 (coming next)
+  * `docker pull nvcr.io/nvidia/tensorflow:17.12`
 
-* CNTK (coming soon)
+* MXNet 1.0.0 (anyone interested?)
+  * `docker pull nvcr.io/nvidia/mxnet:17.12`
+
+* CNTK (anyone interested?)
   * `docker pull nvcr.io/nvidia/cntk:17.12`
 
 
 # GPUs
 
-|Manufacturer|Model     |Architecture|Memory    |CUDA Cores|Tensor Cores|F32 TFLOPS|F16 TFLOPS|Retail|EC2  |
-|------------|----------|------------|----------|----------|------------|----------|----------|------|-----|
-|NVIDIA      |V100      |Volta       |16GB HBM2 |5120      |640         |15.7      |125       |      |$3.06/hr|
-|NVIDIA      |Titan V   |Volta       |12GB HBM2 |5120      |640         |15        |110*      |$2999 |N/A  |
-|NVIDIA      |1080 Ti   |Pascal      |11GB GDDR5|3584      |0           |11        |N/A       |$699  |N/A  |        
+|Model     |Architecture|Memory    |CUDA Cores|Tensor Cores|F32 TFLOPS|F16 TFLOPS|Retail|Cloud  |
+|----------|------------|----------|----------|------------|----------|----------|------|-----|
+|Tesla V100|Volta       |16GB HBM2 |5120      |640         |15.7      |125       |      |$3.06/hr (p3.2xlarge)|
+|Titan V   |Volta       |12GB HBM2 |5120      |640         |15        |110*      |$2999 |N/A  |
+|1080 Ti   |Pascal      |11GB GDDR5|3584      |0           |11        |N/A       |$699  |N/A  |        
 
 
 # CUDA / CuDNN
@@ -83,14 +79,14 @@ Similarly, the numbers from V100 on an Amazon p3 instance is shown.  It is faste
 ### Titan V
 |Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
 |-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
-|Caffe2 0.8.1 |32-bit      |57.6ms       |184.9ms    |74.3ms           |214.2ms        |ms           |ms          |
-|Caffe2 0.8.1 |16-bit      |41.7ms       |156.2ms    |56.7ms           |173.0ms        |ms             |ms          |
+|Caffe2 0.8.1 |32-bit      |57.6ms       |184.9ms    |74.3ms           |214.2ms        |N/A           |N/A          |
+|Caffe2 0.8.1 |16-bit      |41.7ms       |156.2ms    |56.7ms           |173.0ms        |N/A             |N/A          |
 
 ### 1080 Ti
 |Framework    |Precision   |VGG16 eval   |VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
 |-------------|------------|-------------|-----------|-----------------|---------------|-------------------|-----------------|
-|Caffe2 0.8.1 |32-bit      |45.8ms       |154.5ms    |75.7ms           |221.4ms        |ms             |ms          |
-|Caffe2 0.8.1 |16-bit      |38.4ms       |134.9ms    |59.1ms           |181.2ms        |ms             |ms          |
+|Caffe2 0.8.1 |32-bit      |45.8ms       |154.5ms    |75.7ms           |221.4ms        |N/A             |N/A          |
+|Caffe2 0.8.1 |16-bit      |38.4ms       |134.9ms    |59.1ms           |181.2ms        |N/A             |N/A          |
 
 
 # Contributors
