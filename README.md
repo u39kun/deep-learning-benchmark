@@ -75,6 +75,7 @@ Similarly, the numbers from V100 on an Amazon p3 instance is shown.  It is faste
 |32-bit      |26.2ms    |83.5ms     |38.7ms           |136.5ms        |48.3ms             |142.5ms          |
 |16-bit      |12.6ms    |58.8ms     |21.7ms           |92.9ms         |35.7ms             |102.3ms          |
 
+## Tensorflow 1.4.0
 
 ### Titan V
 | Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
