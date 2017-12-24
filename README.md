@@ -49,8 +49,9 @@ Except where noted.
 
 The results are based on running the models with images of size 224 x 224 x 3
 with a batch size of 16.
-"Eval" shows the duration for a single forward pass averaged over 10 passes.
-"Train" shows the duration for a pair of forward and backward passes averaged over 10 runs.
+"Eval" shows the duration for a single forward pass averaged over 20 passes.
+"Train" shows the duration for a pair of forward and backward passes averaged over 20 runs.
+In both scenarios, 20 runs of warm up is performed and those are not counted towards the measured numbers.
 
 Titan V gets a significant speed up when going to half precision by utilizing its Tensor cores, while
 1080 Ti gets a small speed up with half precision computation.
