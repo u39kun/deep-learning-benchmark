@@ -103,6 +103,14 @@ Similarly, the numbers from V100 on an Amazon p3 instance is shown.  It is faste
 | 32-bit     | 47.0ms   | 158.9ms   | 77.9ms          | 223.9ms       |                |                 |
 | 16-bit     | 40.1ms   | 137.8ms   | 61.7ms          | 184.1ms       |                |                 |
 
+# Comparison Graphs
+
+Comparison of Titan V vs 1080 Ti, PyTorch 0.3.0 vs Tensorflow 1.4.0 vs Caffe2 0.8.1, and FP32 vs FP16 in terms of images processed per second:
+
+![vgg16-eval](https://raw.githubusercontent.com/u39kun/deep-learning-benchmark/master/results/vgg16-eval.png)
+![vgg16-train](https://raw.githubusercontent.com/u39kun/deep-learning-benchmark/master/results/vgg16-train.png)
+![resnet152-eval](https://raw.githubusercontent.com/u39kun/deep-learning-benchmark/master/results/resnet152-eval.png)
+![resnet152-train](https://raw.githubusercontent.com/u39kun/deep-learning-benchmark/master/results/resnet152-train.png)
 
 # Contributors
 
