@@ -28,7 +28,7 @@ class tensorflow_base:
         model.add_inference(network)
         self.logits = network.affine(nclass, activation='linear')
         # bogus loss to force backprop
-        self.loss = tf.reduce_mean(self.logits)
+        self.loss = tf.reduce_sum(self.logits)
         self.grad = tf.gradients(self.loss, tf.trainable_variables())
         self.initializer = tf.global_variables_initializer()
 
