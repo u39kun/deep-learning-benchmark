@@ -34,6 +34,7 @@ Note: Docker images available from NVIDIA GPU Cloud were used so as to make benc
 # CUDA / CuDNN
 * CUDA 9.0.176
 * CuDNN 7.0.0.5
+* NVIDIA driver 387.34.
 Except where noted.
 
 
