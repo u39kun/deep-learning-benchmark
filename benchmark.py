@@ -7,7 +7,7 @@ import numpy as np
 
 frameworks = [
     'pytorch',
-    'tensorflow'
+    'tensorflow',
     'caffe2'
 ]
 
