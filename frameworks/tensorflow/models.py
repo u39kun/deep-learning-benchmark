@@ -12,7 +12,7 @@ class tensorflow_base:
         phase_train = False
         data_format = 'NCHW'
         data_type = tf.float32 if precision == 'fp32' else tf.float16
-        image_shape = [16, 3, image_shape[0], image_shape[1]]
+        image_shape = [batch_size, 3, image_shape[0], image_shape[1]]
         nclass = 1000
         use_tf_layers = False
 
