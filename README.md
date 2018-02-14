@@ -12,8 +12,10 @@ Note: Docker images available from NVIDIA GPU Cloud were used so as to make benc
 * Caffe2 0.8.1
   * `docker pull nvcr.io/nvidia/caffe2:17.12`
 
-* Tensorflow 1.4.0 (coming next)
+* TensorFlow 1.4.0 (note: this is TensorFlow 1.4.0 compiled against CUDA 9 and CuDNN 7)
   * `docker pull nvcr.io/nvidia/tensorflow:17.12`
+  
+* TensorFlow 1.5.0
 
 * MXNet 1.0.0 (anyone interested?)
   * `docker pull nvcr.io/nvidia/mxnet:17.12`
@@ -90,6 +92,13 @@ Similarly, the numbers from V100 on an Amazon p3 instance is shown.  It is faste
 | 32-bit      | 43.4ms       | 131.3ms       | 69.6ms           | 300.6ms           |                    |                     |
 | 16-bit      | 38.6ms       | 121.1ms       | 53.9ms           | 257.0ms           |                    |                     |
 
+## TensorFlow 1.5.0
+
+### V100
+| Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+|:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
+| 32-bit      | 24.0ms       | 71.7ms        | 39.4ms           | 199.8ms           |                    |                     |
+| 16-bit      | 13.6ms       | 49.4ms        | 22.6ms           | 147.4ms           |                    |                     |
 
 ## Caffe2 0.8.1
 
