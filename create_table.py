@@ -2,20 +2,21 @@ import argparse
 import pickle
 from tabulate import tabulate
 
-from benchmark import models, precisions
+from benchmark import models, precisions, frameworks
 
 def print_as_table(file):
     results = pickle.load(open(file, 'rb'))
 
     rows = []
-    for precision in precisions:
-      precision_display = '32-bit' if precision == 'fp32' else '16-bit'
-      if precision in results:
-        row = ['{:.1f}ms'.format(v) if v > 0 else '' for v in results[precision]]
-        rows.append([precision_display] + row)
+    for fw in frameworks:
+        for precision in precisions:
+            precision_display = '32-bit' if precision == 'fp32' else '16-bit'
+            if fw in results:
+                row = ['{:.1f}ms'.format(v) if v > 0 else '' for v in results[fw][precision]]
+                rows.append([fw, precision_display] + row)
 
     header = ['{} {}'.format(m, phase) for m in models for phase in ['eval', 'train']]
-    header = ['Precision'] + header
+    header = ['Framework', 'Precision'] + header
     table = tabulate(rows, header, tablefmt="pipe")
     print(table)
 
