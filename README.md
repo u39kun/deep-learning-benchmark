@@ -37,7 +37,7 @@ Note: Docker images available from NVIDIA GPU Cloud were used so as to make benc
 |Tesla V100|Volta       |16GB HBM2 |5120      |640         |15.7      |125       |      |$3.06/hr (p3.2xlarge)|
 |Titan V   |Volta       |12GB HBM2 |5120      |640         |15        |110*      |$2999 |N/A  |
 |1080 Ti   |Pascal      |11GB GDDR5|3584      |0           |11        |N/A       |$699  |N/A  |
-|2080 Ti   |Turing      |11GB GDDR6|4352      |544         |13.4      |26.8      |$999  |N/A  |
+|2080 Ti   |Turing      |11GB GDDR6|4352      |544         |13.4      |26.8      |$1299 |N/A  |
 
 
 # CUDA / CuDNN
