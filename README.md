@@ -9,6 +9,9 @@ Note: Docker images available from NVIDIA GPU Cloud were used so as to make benc
 * PyTorch 0.3.0
   * `docker pull nvcr.io/nvidia/pytorch:17.12`
 
+* PyTorch 1.0.0 (CUDA 10.0, cuDNN 7.4.2)
+  * `docker pull nvcr.io/nvidia/pytorch:19.01-py3` (note: requires login API key to NGC registry)
+
 * Caffe2 0.8.1
   * `docker pull nvcr.io/nvidia/caffe2:17.12`
 
@@ -16,6 +19,9 @@ Note: Docker images available from NVIDIA GPU Cloud were used so as to make benc
   * `docker pull nvcr.io/nvidia/tensorflow:17.12`
   
 * TensorFlow 1.5.0
+
+* TensorFlow 1.12.0 (CUDA 10.0, cuDNN 7.4.2)
+  * `docker pull nvcr.io/nvidia/tensorflow:19.01-py3` (note: requires login API key to NGC registry)
 
 * MXNet 1.0.0 (anyone interested?)
   * `docker pull nvcr.io/nvidia/mxnet:17.12`
@@ -30,13 +36,15 @@ Note: Docker images available from NVIDIA GPU Cloud were used so as to make benc
 |----------|------------|----------|----------|------------|----------|----------|------|-----|
 |Tesla V100|Volta       |16GB HBM2 |5120      |640         |15.7      |125       |      |$3.06/hr (p3.2xlarge)|
 |Titan V   |Volta       |12GB HBM2 |5120      |640         |15        |110*      |$2999 |N/A  |
-|1080 Ti   |Pascal      |11GB GDDR5|3584      |0           |11        |N/A       |$699  |N/A  |        
+|1080 Ti   |Pascal      |11GB GDDR5|3584      |0           |11        |N/A       |$699  |N/A  |
+|2080 Ti   |Turing      |11GB GDDR6|4352      |544         |13.4      |26.8      |$1299 |N/A  |
 
 
 # CUDA / CuDNN
 * CUDA 9.0.176
 * CuDNN 7.0.0.5
 * NVIDIA driver 387.34.
+
 Except where noted.
 
 
@@ -60,59 +68,87 @@ Titan V gets a significant speed up when going to half precision by utilizing it
 1080 Ti gets a small speed up with half precision computation.
 Similarly, the numbers from V100 on an Amazon p3 instance is shown.  It is faster than Titan V and the speed up when going to half-precision is similar to that of Titan V.
 
-### Titan V
-| Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+### 32-bit
+| Model       | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
 |:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
-| 32-bit      | 31.3ms       | 108.8ms       | 48.9ms           | 180.2ms           | 52.4ms             | 174.1ms             |
-| 16-bit      | 14.7ms       | 74.1ms        | 26.1ms           | 115.9ms           | 32.2ms             | 118.9ms             |
+| Titan V     | 31.3ms       | 108.8ms       | 48.9ms           | 180.2ms           | 52.4ms             | 174.1ms             |
+| 1080 Ti     | 39.3ms       | 131.9ms       | 57.8ms           | 206.4ms           | 62.9ms             | 211.9ms             |
+| V100 (Amazon p3, CUDA 9.0.176, CuDNN 7.0.0.3)  |26.2ms    |83.5ms     |38.7ms           |136.5ms        |48.3ms             |142.5ms          |
+| 2080 Ti     | 30.5ms       | 102.9ms       | 41.9ms           | 157.0ms           | 47.3ms             | 160.0ms             |
 
-### 1080 Ti
-| Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+### 16-bit
+| Model       | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
 |:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
-| 32-bit      | 39.3ms       | 131.9ms       | 57.8ms           | 206.4ms           | 62.9ms             | 211.9ms             |
-| 16-bit      | 33.5ms       | 117.6ms       | 46.9ms           | 193.5ms           | 50.1ms             | 191.0ms             |
+| Titan V     | 14.7ms       | 74.1ms        | 26.1ms           | 115.9ms           | 32.2ms             | 118.9ms             |
+| 1080 Ti     | 33.5ms       | 117.6ms       | 46.9ms           | 193.5ms           | 50.1ms             | 191.0ms             |
+| V100 (Amazon p3, CUDA 9.0.176, CuDNN 7.0.0.3)  |12.6ms    |58.8ms     |21.7ms           |92.9ms         |35.7ms             |102.3ms          |
+| 2080 Ti     | 23.6ms       | 99.3ms       | 31.3ms           | 133.0ms           | 35.5ms             | 135.8ms             |
 
-### V100 (Amazon p3, CUDA 9.0.176, CuDNN 7.0.0.3)
-|Precision   |VGG16 eval|VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval   |Densenet161 train|
-|------------|----------|-----------|-----------------|---------------|-------------------|-----------------|
-|32-bit      |26.2ms    |83.5ms     |38.7ms           |136.5ms        |48.3ms             |142.5ms          |
-|16-bit      |12.6ms    |58.8ms     |21.7ms           |92.9ms         |35.7ms             |102.3ms          |
+## PyTorch 1.0.0
+
+### 32-bit
+| Model       | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+|:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
+| 2080 Ti (CUDA 10.0.130, CuDNN 7.4.2.24)  | 28.0ms       | 95.5ms       | 41.8ms           | 142.5ms           | 45.4ms             | 148.4ms             |
+
+### 16-bit
+| Model       | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+|:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
+| 2080 Ti (CUDA 10.0.130, CuDNN 7.4.2.24)  | 19.1ms       | 68.1ms       | 25.0ms           | 98.6ms           | 30.1ms             | 110.8ms             |
 
 ## Tensorflow 1.4.0
 
-### Titan V
-| Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+### 32-bit
+| Model       | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
 |:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
-| 32-bit      | 31.8ms       | 157.2ms       | 50.3ms           | 269.8ms           |                    |                     |
-| 16-bit      | 16.1ms       | 96.7ms        | 28.4ms           | 193.3ms           |                    |                     |
+| Titan V     | 31.8ms       | 157.2ms       | 50.3ms           | 269.8ms           |                    |                     |
+| 1080 Ti     | 43.4ms       | 131.3ms       | 69.6ms           | 300.6ms           |                    |                     |
+| 2080 Ti     | 31.3ms       | 99.4ms       | 43.2ms           | 187.7ms           |                    |                     |
 
-### 1080 Ti
-| Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+### 16-bit
+| Model       | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
 |:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
-| 32-bit      | 43.4ms       | 131.3ms       | 69.6ms           | 300.6ms           |                    |                     |
-| 16-bit      | 38.6ms       | 121.1ms       | 53.9ms           | 257.0ms           |                    |                     |
+| Titan V     | 16.1ms       | 96.7ms        | 28.4ms           | 193.3ms           |                    |                     |
+| 1080 Ti     | 38.6ms       | 121.1ms       | 53.9ms           | 257.0ms           |                    |                     |
+| 2080 Ti     | 24.9ms       | 81.8ms       | 31.9ms           | 155.5ms           |                    |                     |
 
 ## TensorFlow 1.5.0
 
-### V100
-| Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+### 32-bit
+| Model       | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
 |:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
-| 32-bit      | 24.0ms       | 71.7ms        | 39.4ms           | 199.8ms           |                    |                     |
-| 16-bit      | 13.6ms       | 49.4ms        | 22.6ms           | 147.4ms           |                    |                     |
+| V100        | 24.0ms       | 71.7ms        | 39.4ms           | 199.8ms           |                    |                     |
+
+### 16-bit
+| Model       | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+|:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
+| V100        | 13.6ms       | 49.4ms        | 22.6ms           | 147.4ms           |                    |                     |
+
+## TensorFlow 1.12.0
+
+### 32-bit
+| Model       | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+|:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
+| 2080 Ti (CUDA 10.0.130, CuDNN 7.4.2.24)  | 28.8ms       | 90.8ms       | 43.6ms           | 191.0ms           |                    |                     |
+
+### 16-bit
+| Model       | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+|:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
+| 2080 Ti (CUDA 10.0.130, CuDNN 7.4.2.24)  | 18.7ms       | 58.6ms       | 25.8ms           | 133.5ms           |                    |                     |
 
 ## Caffe2 0.8.1
 
-### Titan V
-| Precision   | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+### 32-bit
+| Model       | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
 |:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
-| 32-bit      | 57.5ms       | 185.4ms       | 74.4ms           | 214.1ms           |                    |                     |
-| 16-bit      | 41.6ms       | 156.1ms       | 56.9ms           | 172.7ms           |                    |                     |                    
+| Titan V     | 57.5ms       | 185.4ms       | 74.4ms           | 214.1ms           |                    |                     |
+| 1080 Ti     | 47.0ms       | 158.9ms       | 77.9ms           | 223.9ms           |                    |                     |
 
-### 1080 Ti
-|Precision   |VGG16 eval|VGG16 train|Resnet152 eval   |Resnet152 train|Densenet161 eval|Densenet161 train|
-|------------|----------|-----------|-----------------|---------------|----------------|-----------------|
-| 32-bit     | 47.0ms   | 158.9ms   | 77.9ms          | 223.9ms       |                |                 |
-| 16-bit     | 40.1ms   | 137.8ms   | 61.7ms          | 184.1ms       |                |                 |
+### 16-bit
+| Model       | vgg16 eval   | vgg16 train   | resnet152 eval   | resnet152 train   | densenet161 eval   | densenet161 train   |
+|:------------|:-------------|:--------------|:-----------------|:------------------|:-------------------|:--------------------|
+| Titan V     | 41.6ms       | 156.1ms       | 56.9ms           | 172.7ms           |                    |                     |
+| 1080 Ti     | 40.1ms       | 137.8ms       | 61.7ms           | 184.1ms           |                    |                     |
 
 # Comparison Graphs
 
